@@ -1,41 +1,7 @@
 CHANGES
 =======
 
-* initial of host detail
-* some actions
-* misspell fix
-* more views
-* restore action panels and create device from his context with selecting host
-* get location id
-* fix
-* import fix
-* cleanup client
-* huge changes, switch to roboticeclient lib and much more
-* fix nameerror
-* create and update host workflows
-* cleanups
-* overhaul and some fixes
-* cleanup settings
-* location list
-* local settings
-* settings
-* fixes, settings
-* robotice settings
-* settings
-* fixes
-* provide location header to request
-* control ready
-* fix missing task id
-* location propagation
-* properly populate api exception
-* provide location header to request
-* cleanup workers table
-* control ready
-* cleanups location dash
-* overhaul to 2 dashboards
-* fix missing task id
-* location propagation
-* base implementation for robotice agent system
-* base flower listings
-* basic implementation
+0.0.1
+-----
+
 * Initial commit
