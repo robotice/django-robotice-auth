@@ -1,0 +1,13 @@
+
+
+*.pyc
+config.yml
+celerybeat-schedule
+celerybeat.pid
+*.egg-info
+
+docs/output/*
+
+celerybeat-schedule
+
+*.tar.gz
