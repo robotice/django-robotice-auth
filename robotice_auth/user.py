@@ -100,14 +100,12 @@ class User(models.AnonymousUser):
         return "<%s: %s>" % (self.__class__.__name__, self.username)
 
     @property
-    def project_name(self):
-
-        return self.location
+    def location_name(self):
+        return self.location_id
 
     @property
-    def project_id(self):
-
-        return self.location
+    def location_id(self):
+        return self.location["name"]
 
     @property
     def location(self):

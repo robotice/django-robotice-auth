@@ -153,5 +153,5 @@ def switch(request, location_id, redirect_field_name=auth.REDIRECT_FIELD_NAME):
         auth_user.set_session_from_user(request, user)
     response = shortcuts.redirect(redirect_to)
     utils.set_response_cookie(response, 'recent_project',
-                              request.user.project_id)
+                              request.user.location_id)
     return response
