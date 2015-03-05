@@ -3,5 +3,5 @@
 # process, which may cause wedges in the gate later.
 pbr>=0.6,!=0.7,<1.0
 Django>=1.4.2,<1.8
-python-roboticeclient>=0.1.1
+python-roboticeclient>=0.0.1
 six>=1.9.0
