@@ -53,6 +53,8 @@ def create_user_from_token(request=None, auth_ref=None):
         is_admin = user["is_admin"],
         is_active = user["is_active"],
         locations = user["locations"],
+        location = user["location"],
+        roles = user["roles"],
         token = token,
         user = user
         )
@@ -75,7 +77,7 @@ class User(models.AnonymousUser):
     def __init__(self, id=None, token=None, user=None, roles=None,
                  authorized_tenants=None, endpoint=None, is_active=True,
                  is_admin=False, username=None, first_name=None, last_name=None, email=None,
-                 locations=None, project_name=None):
+                 locations=None, location=None):
 
         self.id = username
         self.pk = username
@@ -83,11 +85,9 @@ class User(models.AnonymousUser):
         self.token = token or Token()
         self.username = username
         self.user = user
-
+        self._location = location
         self.endpoint = None
         self.services_region = None
-        self.domain_id = None
-        self.authorized_tenants = []
         self.is_admin = is_admin
         self.roles = roles or []
         self.locations = locations
@@ -106,11 +106,6 @@ class User(models.AnonymousUser):
 
     @property
     def project_id(self):
-
-        return self.location
-
-    @property
-    def user_domain_id(self):
 
         return self.location
 

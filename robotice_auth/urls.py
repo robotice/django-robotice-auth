@@ -23,4 +23,5 @@ urlpatterns = patterns(
     'robotice_auth.views',
     url(r"^login/$", "login", name='login'),
     url(r"^logout/$", 'logout', name='logout'),
+ 	url(r'^switch/(?P<location_id>[^/]+)/$', 'switch', name='switch_locations'),
 )

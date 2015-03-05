@@ -102,7 +102,7 @@ class RoboticeBackend(object):
         if user.is_anonymous() or obj is not None:
             return set()
 
-        role_perms = set(["csb.roles.%s" % role['name'].lower()
+        role_perms = set(["robotice.roles.%s" % role['name'].lower()
                           for role in user.roles])
         return role_perms
 

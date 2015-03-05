@@ -113,25 +113,26 @@ def logout(request, login_url=None, **kwargs):
     token = request.session.get('token')
     if token:
         # TODO delete token
-        pass
+        # delete actual location
+        data = {"user_id": request.user.id} # or can be remember ?
+        result = utils.robotice_client.identity.switch_location(request, data)
     """ Securely logs a user out. """
     return django_auth_views.logout_then_login(request, login_url=login_url,
                                                **kwargs)
 
 @login_required
-def switch(request, tenant_id, redirect_field_name=auth.REDIRECT_FIELD_NAME):
-    """Switches an authenticated user from one project to another."""
+def switch(request, location_id, redirect_field_name=auth.REDIRECT_FIELD_NAME):
+    """Switches an authenticated user from one location to another."""
     LOG.debug('Switching to tenant %s for user "%s".'
-              % (tenant_id, request.user.username))
+              % (location_id, request.user.username))
 
-    endpoint = utils.fix_auth_url_version(request.user.endpoint)
-    session = utils.get_session()
-    auth = utils.get_token_auth_plugin(auth_url=endpoint,
-                                       token=request.user.token.id,
-                                       project_id=tenant_id)
-
+    user_id = request.user.id
+    data = {
+        "user_id": user_id,
+        "location_id": location_id
+    }
     try:
-        auth_ref = auth.get_access(session)
+        result = utils.robotice_client.identity.switch_location(request, data)
         msg = 'Project switch successful for user "%(username)s".' % \
             {'username': request.user.username}
         LOG.info(msg)
@@ -139,7 +140,6 @@ def switch(request, tenant_id, redirect_field_name=auth.REDIRECT_FIELD_NAME):
         msg = 'Project switch failed for user "%(username)s".' % \
             {'username': request.user.username}
         LOG.warning(msg)
-        auth_ref = None
         LOG.exception('An error occurred while switching sessions.')
 
     # Ensure the user-originating redirection url is safe.
@@ -148,13 +148,8 @@ def switch(request, tenant_id, redirect_field_name=auth.REDIRECT_FIELD_NAME):
     if not is_safe_url(url=redirect_to, host=request.get_host()):
         redirect_to = settings.LOGIN_REDIRECT_URL
 
-    if auth_ref:
-        old_endpoint = request.session.get('region_endpoint')
-        old_token = request.session.get('token')
-        if old_token and old_endpoint and old_token.id != auth_ref.auth_token:
-            delete_token(endpoint=old_endpoint, token_id=old_token.id)
-        user = auth_user.create_user_from_token(
-            request, auth_user.Token(auth_ref), endpoint)
+    if "key" in result["token"]:
+        user = auth_user.create_user_from_token(auth_ref=result)
         auth_user.set_session_from_user(request, user)
     response = shortcuts.redirect(redirect_to)
     utils.set_response_cookie(response, 'recent_project',
